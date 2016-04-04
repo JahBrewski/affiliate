@@ -8,12 +8,6 @@
   },
   "type": "magento2-module",
   "version": "0.1.0",
-  "respositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/jahbrewski/"
-    }
-  ],
   "autoload": {
     "files": [ "registration.php" ],
     "psr-4": {
