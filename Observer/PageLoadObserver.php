@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 class PageLoadObserver implements ObserverInterface {
   public function execute(\Magento\Framework\Event\Observer $observer) {
-		$url = 'https://toorapi.ngrok.com/test';
+		$url = 'https://toorapi.ngrok.io/test';
 		$data = array('key1' => 'Someone has visited Pref*it!');
 
 		// use key 'http' even if you send the request to https://...
