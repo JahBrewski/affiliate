@@ -10,4 +10,7 @@
   <event name="controller_front_send_response_before">
     <observer name="affiliate_page_load" instance="BrewerDigital\Affiliate\Observer\PageLoadObserver" />
   </event>
+  <event name="checkout_submit_all_after">
+    <observer name="affiliate_order_placed" instance="BrewerDigital\Affiliate\Observer\OrderPlacedObserver" />
+  </event>
 </config>
