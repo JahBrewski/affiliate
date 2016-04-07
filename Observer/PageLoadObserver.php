@@ -18,8 +18,8 @@ class PageLoadObserver implements ObserverInterface {
 
 		$params = $observer->getEvent()->getRequest()->getParams();
 
-		if (isset($params["a"])) {
-			$affiliate_id = $params["a"];
+		if (isset($params["aid"])) {
+			$affiliate_id = $params["aid"];
 			setcookie($affiliate_cookie_name, $affiliate_id, time() + $cookie_length_in_seconds, "/");
 		}
 
