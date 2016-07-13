@@ -58,15 +58,16 @@ class OrderPlacedObserver implements ObserverInterface {
 		if (!empty($affiliate_id) && !empty($customer_id)) {
 			$this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
 
-			//$url = 'https://prefit.ngrok.io/order_placed';
-			$url = 'https://prefit-api.herokuapp.com/order_placed';
+			//$url = 'https://my.ngrok.io/order_placed';
+			$url = 'https://api.domain.com/v1/orders/order_placed';
 
-  		$data = array(
-				'affiliate_id' => $affiliate_id,
-				'customer_id'  => $customer_id,
-				'order_amount' => $order_amount,
-				'magento_order_id'		 => $order_id,
-			  'items'				 => $items_string);
+  		$data = array( 'order' => array(
+			'affiliate_id' => $affiliate_id,
+			'user_id'  => $customer_id,
+			'order_amount' => $order_amount,
+			'merchant_order_id' => $order_id,
+			'items' => $items_string)
+		);	
   		
   		$options = array(
   		    'http' => array(
