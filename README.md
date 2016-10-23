@@ -3,5 +3,5 @@
 # ssh into Magento server
 ssh jb@magento
 # update using composer
-sudo composer.phar update jahbrewski/affiliate
+sudo php composer.phar update jahbrewski/affiliate
 ```
