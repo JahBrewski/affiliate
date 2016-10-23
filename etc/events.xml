@@ -13,4 +13,7 @@
   <event name="checkout_submit_all_after">
     <observer name="affiliate_order_placed" instance="BrewerDigital\Affiliate\Observer\OrderPlacedObserver" />
   </event>
+  <event name="sales_order_save_after">
+    <observer name="affiliate_order_updated" instance="BrewerDigital\Affiliate\Observer\OrderUpdatedObserver" />
+  </event>
 </config>
