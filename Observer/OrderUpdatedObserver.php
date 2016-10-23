@@ -19,9 +19,10 @@ class OrderUpdatedObserver implements ObserverInterface {
 
     $order = $observer->getEvent()->getOrder();
     $order_id = $order->getRealOrderId();
+    $order_status = $order->getStatus();
     $this->_logger->addDebug('########## BEGIN ORDER ##########');
     $this->_logger->addDebug($order_id);
-    $this->_logger->addDebug($order);
+    $this->_logger->addDebug($order_status);
     $this->_logger->addDebug('########## END ORDER ##########');
   }
 }
