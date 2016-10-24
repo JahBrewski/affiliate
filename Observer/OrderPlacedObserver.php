@@ -22,6 +22,10 @@ class OrderPlacedObserver implements ObserverInterface {
     $affiliate_cookie_name = "brewerdigital_affiliate_affiliate_id";
     $customer_cookie_name  = "brewerdigital_affiliate_customer_id";
 
+    // TODO: This needs to be set in an admin page somewhere
+    $merchant_uuid = 0001;
+
+
     $order = $observer->getEvent()->getOrder();
     $items = $order->getAllItems();
 
@@ -54,7 +58,6 @@ class OrderPlacedObserver implements ObserverInterface {
     if (!empty($affiliate_id) && !empty($customer_id)) {
       $this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
 
-      //$url = 'https://my.ngrok.io/order_placed';
       //$url = 'https://api.domain.com/v1/orders/order_placed';
       $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
 

@@ -35,7 +35,6 @@ class OrderUpdatedObserver implements ObserverInterface {
     $this->_logger->addDebug($order_status);
     $this->_logger->addDebug('########## END ORDER ##########');
 
-    //$url = 'https://my.ngrok.io/order_placed';
     $url = 'https://8b8e9762.ngrok.io/v1/orders/order_updated';
     //$url = 'https://api.domain.com/v1/orders/order_placed';
 
