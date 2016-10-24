@@ -47,6 +47,7 @@ class OrderUpdatedObserver implements ObserverInterface {
 
     $options = array(
       'http' => array(
+        'timeout'=>2,
         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
         'method'  => 'POST',
         'content' => http_build_query($data)
@@ -54,7 +55,7 @@ class OrderUpdatedObserver implements ObserverInterface {
     );
 
     $context  = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
+    $result = @file_get_contents($url, false, $context);
     $this->_logger->addDebug($result);
   }
 }
