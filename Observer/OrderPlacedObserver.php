@@ -55,7 +55,8 @@ class OrderPlacedObserver implements ObserverInterface {
       $this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
 
       //$url = 'https://my.ngrok.io/order_placed';
-      $url = 'https://api.domain.com/v1/orders/order_placed';
+      //$url = 'https://api.domain.com/v1/orders/order_placed';
+      $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
 
       $data = array( 'order' => array(
       'affiliate_id' => $affiliate_id,
@@ -67,6 +68,7 @@ class OrderPlacedObserver implements ObserverInterface {
       
       $options = array(
           'http' => array(
+            'timeout' => 2,
             'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
             'method'  => 'POST',
             'content' => http_build_query($data)
@@ -74,7 +76,7 @@ class OrderPlacedObserver implements ObserverInterface {
           );
       
       $context  = stream_context_create($options);
-      $result = file_get_contents($url, false, $context);
+      $result = @file_get_contents($url, false, $context);
       $this->_logger->addDebug($result);
     }
   }
