@@ -15,9 +15,10 @@ class PageLoadObserver implements ObserverInterface {
   }
 
   public function execute(\Magento\Framework\Event\Observer $observer) {
-    $affiliate_id = $customer_id = null;
+    $affiliate_id = $customer_id = $url = null;
     $affiliate_cookie_name = "brewerdigital_affiliate_affiliate_id";
     $customer_cookie_name  = "brewerdigital_affiliate_customer_id";
+    $url_cookie_name       = "brewerdigital_affiliate_customer_url_landing";
     $seconds_in_day = 86400;
     $cookie_length_in_days = 30;
     $cookie_length_in_seconds = $seconds_in_day * $cookie_length_in_days;
@@ -25,18 +26,12 @@ class PageLoadObserver implements ObserverInterface {
     $params = $observer->getEvent()->getRequest()->getParams();
     
     // WIP: Grab page URL and store in cookie
-    $currentUrl = Mage::helper('core/url')->getCurrentUrl();
-    $url = Mage::getSingleton('core/url')->parseUrl($currentUrl);
-    $path = $url->getPath();
-
-    $this->_logger->addDebug('########## currentURL ##########');
-    $this->_logger->addDebug($currentUrl);
-
-    $this->_logger->addDebug('########## URL ##########');
-    $this->_logger->addDebug($url);
-
-    $this->_logger->addDebug('########## Path ##########');
-    $this->_logger->addDebug($path);
+    if (isset($params["url"])) {
+      $url = urldecode($params["url"]);
+      $this->_logger->addDebug('########## URL ##########');
+      $this->_logger->addDebug($url);
+      setcookie($url_cookie_name, $url, time() + $cookie_length_in_seconds, "/");
+    }
 
     if (isset($params["aid"])) {
       $affiliate_id = $params["aid"];
