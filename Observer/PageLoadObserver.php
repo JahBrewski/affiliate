@@ -24,7 +24,10 @@ class PageLoadObserver implements ObserverInterface {
     $cookie_length_in_seconds = $seconds_in_day * $cookie_length_in_days;
 
     $params = $observer->getEvent()->getRequest()->getParams();
-    
+
+    // TODO: Grab content post id and store in a cookie so we can track
+    // converted purchases and assoicate them with content posts
+
     // WIP: Grab page URL and store in cookie
     if (isset($params["url"])) {
       $url = urldecode($params["url"]);

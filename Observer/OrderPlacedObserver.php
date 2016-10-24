@@ -18,9 +18,10 @@ class OrderPlacedObserver implements ObserverInterface {
     // Order defined here: 
     // https://github.com/magento/magento2/blob/6ea7d2d85cded3fa0fbcf4e7aa0dcd4edbf568a6/app/code/Magento/Sales/Model/Order.php
 
-    $affiliate_id = $customer_id = null;
+    $affiliate_id = $customer_id = $url = null;
     $affiliate_cookie_name = "brewerdigital_affiliate_affiliate_id";
     $customer_cookie_name  = "brewerdigital_affiliate_customer_id";
+    $url_cookie_name       = "brewerdigital_affiliate_customer_url_landing";
 
     // TODO: This needs to be set in an admin page somewhere
     $merchant_uuid = 0001;
@@ -55,12 +56,22 @@ class OrderPlacedObserver implements ObserverInterface {
         $this->_logger->addDebug($customer_id);
     }
 
+    if(isset($_COOKIE[$url_cookie_name])) {
+        $this->_logger->addDebug('URL landing cookie set! Cookie is:');
+        $url = $_COOKIE[$url_cookie_name];
+        $this->_logger->addDebug($url);
+    }
+
     if (!empty($affiliate_id) && !empty($customer_id)) {
       $this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
 
       //$url = 'https://api.domain.com/v1/orders/order_placed';
       $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
 
+      // TODO: Loop through items and check if any items match the item
+      // associated with the URL. If so, mark the item as a 'converted purchase'
+
+      // TODO : Pass merchant ID so that API can associate order with a merchant
       $data = array( 'order' => array(
       'affiliate_id' => $affiliate_id,
       'user_id'  => $customer_id,
