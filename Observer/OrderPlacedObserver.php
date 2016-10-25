@@ -116,11 +116,6 @@ class OrderPlacedObserver implements ObserverInterface {
       $this->_logger->addDebug($result);
     }
   }
-
-  private function getSKUFromURL(url) {
-
-
-  }
 }
 
 
