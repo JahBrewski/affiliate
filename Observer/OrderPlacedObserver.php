@@ -44,8 +44,8 @@ class OrderPlacedObserver implements ObserverInterface {
       $this->_logger->addDebug('########## ITEM NAME ##########');
       $this->_logger->addDebug($item->getName());
       $product = $item->getProduct();
-      $this->_logger->addDebug('########## ITEM PRODUCT ##########');
-      $this->_logger->addDebug($item->getProduct());
+      //$this->_logger->addDebug('########## ITEM PRODUCT ##########');
+      //$this->_logger->addDebug($item->getProduct());
       if ($product) {
         $this->_logger->addDebug('########## INSIDE PRODUCT IF STATEMENT ##########');
         $item_urls[] = $product->getProductUrl();
