@@ -16,9 +16,10 @@ class PageLoadObserver implements ObserverInterface {
 
   public function execute(\Magento\Framework\Event\Observer $observer) {
     $affiliate_id = $customer_id = $url = null;
-    $affiliate_cookie_name = "brewerdigital_affiliate_affiliate_id";
-    $customer_cookie_name  = "brewerdigital_affiliate_customer_id";
-    $url_cookie_name       = "brewerdigital_affiliate_customer_url_landing";
+    $affiliate_cookie_name      = "brewerdigital_affiliate_affiliate_id";
+    $customer_cookie_name       = "brewerdigital_affiliate_customer_id";
+    $url_cookie_name            = "brewerdigital_affiliate_customer_url_landing";
+    $content_post_cookie_name   = "brewerdigital_affiliate_content_post_id";
     $seconds_in_day = 86400;
     $cookie_length_in_days = 30;
     $cookie_length_in_seconds = $seconds_in_day * $cookie_length_in_days;
@@ -26,7 +27,13 @@ class PageLoadObserver implements ObserverInterface {
     $params = $observer->getEvent()->getRequest()->getParams();
 
     // TODO: Grab content post id and store in a cookie so we can track
-    // converted purchases and assoicate them with content posts
+    // converted purchases and associate them with content posts
+    if (isset($params["cpid"])) {
+      $content_post_id = urldecode($params["cpid"]);
+      $this->_logger->addDebug('########## Content Post ID ##########');
+      $this->_logger->addDebug($content_post_id);
+      setcookie($content_post_cookie_name, $content_post_id, time() + $cookie_length_in_seconds, "/");
+    }
 
     // WIP: Grab page URL and store in cookie
     if (isset($params["url"])) {

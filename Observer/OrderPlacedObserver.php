@@ -34,12 +34,21 @@ class OrderPlacedObserver implements ObserverInterface {
     $order_id = $order->getRealOrderId();
 
     $item_names = array();
+    $item_urls = array();
 
     foreach($items as $item) {
       $item_names[] = $item->getName();
+      $item_urls[] = $item->getProductUrl();
     }
 
     $items_string = implode(",", $item_names);
+    $items_url_string = implode(",", $item_urls);
+
+    $this->_logger->addDebug('########## ITEM NAMES ##########');
+    $this->_logger->addDebug($items_string);
+
+    $this->_logger->addDebug('########## ITEM URLS ##########');
+    $this->_logger->addDebug($items_url_string);
 
     $this->_logger->addDebug('########## ORDER PLACED BRO ##########');
 
@@ -93,6 +102,11 @@ class OrderPlacedObserver implements ObserverInterface {
       $result = @file_get_contents($url, false, $context);
       $this->_logger->addDebug($result);
     }
+  }
+
+  private function getSKUFromURL(url) {
+
+
   }
 }
 
