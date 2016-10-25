@@ -35,8 +35,17 @@ class OrderPlacedObserver implements ObserverInterface {
 
     $item_names = array();
     $item_urls = array();
+    $items_array = array();
 
 
+    // TODO: Now that we are able to grab the URL associated with a product, we
+    // need to build an items array to pass to the Pref-It API. The items array
+    // should include:
+    // Item name : string
+    // Item SKU : string
+    // Item amount : number
+    // Is_converted_purchase : boolean
+    
     $this->_logger->addDebug('########## BEFORE ITEM LOOP ##########');
     foreach($items as $item) {
       $this->_logger->addDebug('########## INSIDE ITEM LOOP ##########');
@@ -53,6 +62,7 @@ class OrderPlacedObserver implements ObserverInterface {
         $this->_logger->addDebug($product->getProductUrl());
       }
     }
+      
 
     $items_string = implode(",", $item_names);
     $items_url_string = implode(",", $item_urls);
@@ -89,9 +99,6 @@ class OrderPlacedObserver implements ObserverInterface {
 
       //$url = 'https://api.domain.com/v1/orders/order_placed';
       $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
-
-      // TODO: Loop through items and check if any items match the item
-      // associated with the URL. If so, mark the item as a 'converted purchase'
 
       // TODO : Pass merchant ID so that API can associate order with a merchant
       $data = array( 'order' => array(
