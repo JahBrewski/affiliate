@@ -38,7 +38,8 @@ class OrderPlacedObserver implements ObserverInterface {
 
     foreach($items as $item) {
       $item_names[] = $item->getName();
-      $item_urls[] = $item->getProductUrl();
+      $product = $item->getProduct();
+      $item_urls[] = $product->getProductUrl();
     }
 
     $items_string = implode(",", $item_names);
