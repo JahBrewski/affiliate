@@ -36,10 +36,22 @@ class OrderPlacedObserver implements ObserverInterface {
     $item_names = array();
     $item_urls = array();
 
+
+    $this->_logger->addDebug('########## BEFORE ITEM LOOP ##########');
     foreach($items as $item) {
+      $this->_logger->addDebug('########## INSIDE ITEM LOOP ##########');
       $item_names[] = $item->getName();
+      $this->_logger->addDebug('########## ITEM NAME ##########');
+      $this->_logger->addDebug($item->getName());
       $product = $item->getProduct();
-      $item_urls[] = $product->getProductUrl();
+      $this->_logger->addDebug('########## ITEM PRODUCT ##########');
+      $this->_logger->addDebug($item->getProduct());
+      if ($product) {
+        $this->_logger->addDebug('########## INSIDE PRODUCT IF STATEMENT ##########');
+        $item_urls[] = $product->getProductUrl();
+        $this->_logger->addDebug('########## PRODUCT URL ##########');
+        $this->_logger->addDebug($product->getProductUrl());
+      }
     }
 
     $items_string = implode(",", $item_names);
