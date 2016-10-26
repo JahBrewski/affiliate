@@ -82,7 +82,7 @@ class OrderPlacedObserver implements ObserverInterface {
         //$this->_logger->addDebug($product->getProductUrl());
       }
       $this->_logger->addDebug('########## NEW ITEM ##########');
-      $this->_logger->addDebug($new_item);
+      $this->_logger->addDebug(implode(",", $new_item));
       $items_array[] = $new_item;
     }
       
