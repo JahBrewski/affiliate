@@ -33,9 +33,15 @@ class OrderPlacedObserver implements ObserverInterface {
     $order_amount = $order->getGrandTotal();
     $order_id = $order->getRealOrderId();
 
-    $item_names = array();
-    $item_urls = array();
+    //$item_names = array();
+    //$item_urls = array();
     $items_array = array();
+
+    if(isset($_COOKIE[$url_cookie_name])) {
+        //$this->_logger->addDebug('URL landing cookie set! Cookie is:');
+        $url = $_COOKIE[$url_cookie_name];
+        //$this->_logger->addDebug($url);
+    }
 
 
     // TODO: Now that we are able to grab the URL associated with a product, we
@@ -48,32 +54,49 @@ class OrderPlacedObserver implements ObserverInterface {
     
     $this->_logger->addDebug('########## BEFORE ITEM LOOP ##########');
     foreach($items as $item) {
-      $this->_logger->addDebug('########## INSIDE ITEM LOOP ##########');
-      $item_names[] = $item->getName();
-      $this->_logger->addDebug('########## ITEM NAME ##########');
-      $this->_logger->addDebug($item->getName());
+      $new_item = array();
+      //$this->_logger->addDebug('########## INSIDE ITEM LOOP ##########');
+      $new_item['name'] = $item->getName();
+      $new_item['sku'] = $item->getSku();
+      $new_item['price'] = $item->getPrice();
+      $new_item['is_converted_purchase'] = false;
+
+      //$item_names[] = $item->getName();
+
+      //$this->_logger->addDebug('########## ITEM NAME ##########');
+      //$this->_logger->addDebug($item->getName());
       $product = $item->getProduct();
       //$this->_logger->addDebug('########## ITEM PRODUCT ##########');
       //$this->_logger->addDebug($item->getProduct());
       if ($product) {
-        $this->_logger->addDebug('########## INSIDE PRODUCT IF STATEMENT ##########');
-        $item_urls[] = $product->getProductUrl();
-        $this->_logger->addDebug('########## PRODUCT URL ##########');
-        $this->_logger->addDebug($product->getProductUrl());
+        //$this->_logger->addDebug('########## INSIDE PRODUCT IF STATEMENT ##########');
+        //$item_urls[] = $product->getProductUrl();
+        //
+        $product_url = $product->getProductUrl();
+        $new_item['url'] = $product_url;
+
+        if ($url && ($url == $product_url)) {
+          $new_item['is_converted_purchase'] = true;
+        }
+        //$this->_logger->addDebug('########## PRODUCT URL ##########');
+        //$this->_logger->addDebug($product->getProductUrl());
       }
+      $this->_logger->addDebug('########## NEW ITEM ##########');
+      $this->_logger->addDebug($new_item);
+      $items_array[] = $new_item;
     }
       
 
-    $items_string = implode(",", $item_names);
-    $items_url_string = implode(",", $item_urls);
+    //$items_string = implode(",", $item_names);
+    //$items_url_string = implode(",", $item_urls);
 
-    $this->_logger->addDebug('########## ITEM NAMES ##########');
-    $this->_logger->addDebug($items_string);
+    //$this->_logger->addDebug('########## ITEM NAMES ##########');
+    //$this->_logger->addDebug($items_string);
 
-    $this->_logger->addDebug('########## ITEM URLS ##########');
-    $this->_logger->addDebug($items_url_string);
+    //$this->_logger->addDebug('########## ITEM URLS ##########');
+    //$this->_logger->addDebug($items_url_string);
 
-    $this->_logger->addDebug('########## ORDER PLACED BRO ##########');
+    //$this->_logger->addDebug('########## ORDER PLACED BRO ##########');
 
 
     if(isset($_COOKIE[$affiliate_cookie_name])) {
@@ -88,11 +111,6 @@ class OrderPlacedObserver implements ObserverInterface {
         $this->_logger->addDebug($customer_id);
     }
 
-    if(isset($_COOKIE[$url_cookie_name])) {
-        $this->_logger->addDebug('URL landing cookie set! Cookie is:');
-        $url = $_COOKIE[$url_cookie_name];
-        $this->_logger->addDebug($url);
-    }
 
     if (!empty($affiliate_id) && !empty($customer_id)) {
       $this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
@@ -106,7 +124,7 @@ class OrderPlacedObserver implements ObserverInterface {
       'user_id'  => $customer_id,
       'order_amount' => $order_amount,
       'merchant_order_id' => $order_id,
-      'items' => $items_string)
+      'items' => $items_array)
     );  
       
       $options = array(
