@@ -3,10 +3,6 @@ namespace BrewerDigital\Affiliate\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-// TODO: Remove
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
-
 class OrderPlacedObserver implements ObserverInterface {
   protected $_logger;
 
@@ -27,15 +23,12 @@ class OrderPlacedObserver implements ObserverInterface {
     // TODO: This needs to be set in an admin page somewhere
     $merchant_uuid = "0001";
 
-
     $order = $observer->getEvent()->getOrder();
     $items = $order->getAllItems();
 
     $order_amount = $order->getGrandTotal();
     $order_id = $order->getRealOrderId();
 
-    //$item_names = array();
-    //$item_urls = array();
     $items_array = array();
 
     if(isset($_COOKIE[$url_cookie_name])) {
@@ -50,47 +43,23 @@ class OrderPlacedObserver implements ObserverInterface {
         $this->_logger->addDebug($content_post_id);
     }
 
-
-    // TODO: Now that we are able to grab the URL associated with a product, we
-    // need to build an items array to pass to the Pref-It API. The items array
-    // should include:
-    // Item name : string
-    // Item SKU : string
-    // Item amount : number
-    // Is_converted_purchase : boolean
-    
-    $this->_logger->addDebug('########## BEFORE ITEM LOOP ##########');
     foreach($items as $item) {
       $new_item = array();
-      //$this->_logger->addDebug('########## INSIDE ITEM LOOP ##########');
       $new_item['name'] = $item->getName();
       $new_item['sku'] = $item->getSku();
       $new_item['price'] = $item->getPrice();
       $new_item['is_converted_purchase'] = false;
 
-      //$item_names[] = $item->getName();
-
-      //$this->_logger->addDebug('########## ITEM NAME ##########');
-      //$this->_logger->addDebug($item->getName());
       $product = $item->getProduct();
-      //$this->_logger->addDebug('########## ITEM PRODUCT ##########');
-      //$this->_logger->addDebug($item->getProduct());
+
       if ($product) {
-        //$this->_logger->addDebug('########## INSIDE PRODUCT IF STATEMENT ##########');
-        //$item_urls[] = $product->getProductUrl();
-        //
         $product_url = $product->getProductUrl();
         $new_item['url'] = $product_url;
 
         if ($url && ($url == $product_url)) {
           $new_item['is_converted_purchase'] = true;
         }
-        //$this->_logger->addDebug('########## PRODUCT URL ##########');
-        //$this->_logger->addDebug($product->getProductUrl());
       }
-
-      $this->_logger->addDebug('########## NEW ITEM ##########');
-      $this->_logger->addDebug(implode(",", $new_item));
 
       // Don't add items with a price of zero This is used to filter out 
       // additional zero-priced items Magento adds to the order. From our
@@ -102,22 +71,8 @@ class OrderPlacedObserver implements ObserverInterface {
       // sent, or if converted purchases are not being correctly tracked.
       if ($new_item['price'] != "0") {
         $items_array[] = $new_item;
-
       }
     }
-      
-
-    //$items_string = implode(",", $item_names);
-    //$items_url_string = implode(",", $item_urls);
-
-    //$this->_logger->addDebug('########## ITEM NAMES ##########');
-    //$this->_logger->addDebug($items_string);
-
-    //$this->_logger->addDebug('########## ITEM URLS ##########');
-    //$this->_logger->addDebug($items_url_string);
-
-    //$this->_logger->addDebug('########## ORDER PLACED BRO ##########');
-
 
     if(isset($_COOKIE[$affiliate_cookie_name])) {
         $this->_logger->addDebug('Affiliate cookie set! Cookie is:');
