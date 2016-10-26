@@ -24,7 +24,7 @@ class OrderPlacedObserver implements ObserverInterface {
     $url_cookie_name       = "brewerdigital_affiliate_customer_url_landing";
 
     // TODO: This needs to be set in an admin page somewhere
-    $merchant_uuid = 0001;
+    $merchant_uuid = "0001";
 
 
     $order = $observer->getEvent()->getOrder();
@@ -38,9 +38,9 @@ class OrderPlacedObserver implements ObserverInterface {
     $items_array = array();
 
     if(isset($_COOKIE[$url_cookie_name])) {
-        //$this->_logger->addDebug('URL landing cookie set! Cookie is:');
+        $this->_logger->addDebug('URL landing cookie set! Cookie is:');
         $url = $_COOKIE[$url_cookie_name];
-        //$this->_logger->addDebug($url);
+        $this->_logger->addDebug($url);
     }
 
 
@@ -83,7 +83,19 @@ class OrderPlacedObserver implements ObserverInterface {
       }
       $this->_logger->addDebug('########## NEW ITEM ##########');
       $this->_logger->addDebug(implode(",", $new_item));
-      $items_array[] = $new_item;
+
+      // Don't add items with a price of zero This is used to filter out 
+      // additional zero-priced items Magento adds to the order. From our
+      // understanding, for products that have multiple colors/sizes/etc.
+      // Magento adds two items -- one is the zero-priced child item (containing
+      // size/color metadata), and one is the fully-priced parent item (does not
+      // contain size/color metadata). This code might need to be revisited if
+      // we find that items that should be sent to our server are not being
+      // sent, or if converted purchases are not being correctly tracked.
+      if ($new_item['price'] != "0") {
+        $items_array[] = $new_item;
+
+      }
     }
       
 
@@ -124,7 +136,8 @@ class OrderPlacedObserver implements ObserverInterface {
       'user_id'  => $customer_id,
       'order_amount' => $order_amount,
       'merchant_order_id' => $order_id,
-      'items' => $items_array)
+      'merchant_uuid' => $merchant_uuid,
+      'order_items_attributes' => $items_array)
     );  
       
       $options = array(
