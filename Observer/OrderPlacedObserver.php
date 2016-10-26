@@ -89,10 +89,6 @@ class OrderPlacedObserver implements ObserverInterface {
         //$this->_logger->addDebug($product->getProductUrl());
       }
 
-      if ($content_post_id) {
-        $new_item['content_post_id'] = $content_post_id;
-      }
-
       $this->_logger->addDebug('########## NEW ITEM ##########');
       $this->_logger->addDebug(implode(",", $new_item));
 
@@ -136,31 +132,33 @@ class OrderPlacedObserver implements ObserverInterface {
     }
 
 
-    if (!empty($affiliate_id) && !empty($customer_id)) {
-      $this->_logger->addDebug('Affiliate ID and Customer ID are not empty');
+    if (!empty($affiliate_id) && !empty($customer_id) && !empty($content_post_id)) {
+      $this->_logger->addDebug('Affiliate ID and Customer ID and content post ID are not empty');
 
       //$url = 'https://api.domain.com/v1/orders/order_placed';
       $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
 
-      // TODO : Pass merchant ID so that API can associate order with a merchant
-      $data = array( 'order' => array(
-      'affiliate_id' => $affiliate_id,
-      'user_id'  => $customer_id,
-      'order_amount' => $order_amount,
-      'merchant_order_id' => $order_id,
-      'merchant_uuid' => $merchant_uuid,
-      'order_items_attributes' => $items_array)
-    );  
-      
+      $data = array(
+        'order' => array(
+          'affiliate_id' => $affiliate_id,
+          'user_id'  => $customer_id,
+          'order_amount' => $order_amount,
+          'merchant_order_id' => $order_id,
+          'merchant_uuid' => $merchant_uuid,
+          'content_post_id' => $content_post_id,
+          'order_items_attributes' => $items_array
+        )
+      );
+
       $options = array(
-          'http' => array(
-            'timeout' => 2,
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
-            'content' => http_build_query($data)
-            )
-          );
-      
+        'http' => array(
+          'timeout' => 2,
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($data)
+        )
+      );
+
       $context  = stream_context_create($options);
       $result = @file_get_contents($url, false, $context);
       $this->_logger->addDebug($result);
