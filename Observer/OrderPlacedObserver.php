@@ -18,10 +18,11 @@ class OrderPlacedObserver implements ObserverInterface {
     // Order defined here: 
     // https://github.com/magento/magento2/blob/6ea7d2d85cded3fa0fbcf4e7aa0dcd4edbf568a6/app/code/Magento/Sales/Model/Order.php
 
-    $affiliate_id = $customer_id = $url = null;
+    $affiliate_id = $customer_id = $url = $content_post_id = null;
     $affiliate_cookie_name = "brewerdigital_affiliate_affiliate_id";
     $customer_cookie_name  = "brewerdigital_affiliate_customer_id";
     $url_cookie_name       = "brewerdigital_affiliate_customer_url_landing";
+    $content_post_cookie_name   = "brewerdigital_affiliate_content_post_id";
 
     // TODO: This needs to be set in an admin page somewhere
     $merchant_uuid = "0001";
@@ -41,6 +42,12 @@ class OrderPlacedObserver implements ObserverInterface {
         $this->_logger->addDebug('URL landing cookie set! Cookie is:');
         $url = $_COOKIE[$url_cookie_name];
         $this->_logger->addDebug($url);
+    }
+
+    if(isset($_COOKIE[$content_post_cookie_name])) {
+        $this->_logger->addDebug('Content Post ID cookie set! Cookie is:');
+        $content_post_id = $_COOKIE[$content_post_cookie_name];
+        $this->_logger->addDebug($content_post_id);
     }
 
 
@@ -81,6 +88,11 @@ class OrderPlacedObserver implements ObserverInterface {
         //$this->_logger->addDebug('########## PRODUCT URL ##########');
         //$this->_logger->addDebug($product->getProductUrl());
       }
+
+      if ($content_post_id) {
+        $new_item['content_post_id'] = $content_post_id;
+      }
+
       $this->_logger->addDebug('########## NEW ITEM ##########');
       $this->_logger->addDebug(implode(",", $new_item));
 
