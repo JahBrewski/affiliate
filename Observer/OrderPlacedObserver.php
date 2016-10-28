@@ -90,8 +90,8 @@ class OrderPlacedObserver implements ObserverInterface {
     if (!empty($affiliate_id) && !empty($customer_id) && !empty($content_post_id)) {
       $this->_logger->addDebug('Affiliate ID and Customer ID and content post ID are not empty');
 
-      //$url = 'https://api.domain.com/v1/orders/order_placed';
-      $url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
+      $url = 'https://api.pref-it.com/v1/orders/order_placed';
+      //$url = 'https://8b8e9762.ngrok.io/v1/orders/order_placed';
 
       $data = array(
         'order' => array(
